@@ -1,4 +1,4 @@
 # Test-Task-2
  collectible card game
 
-see .pdf inside Assest folder
+see unity_developerpdf.pdf inside Assest folder
