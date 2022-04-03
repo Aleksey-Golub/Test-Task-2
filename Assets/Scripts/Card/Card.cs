@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using DG.Tweening;
 
 public enum CardParameter
 {
@@ -9,9 +8,17 @@ public enum CardParameter
     Attack
 }
 
+public enum CardState
+{
+    InHand,
+    Drag,
+    DropOnPanel    
+}
+
 public class Card : MonoBehaviour
 {
     [SerializeField] private CardView _view;
+    [SerializeField] private CardMover _mover;
 
     private CardData _data;
     private int _mana;
@@ -20,6 +27,7 @@ public class Card : MonoBehaviour
     private bool _isDied => _health < 1;
 
     public event Action<Card> Died;
+    public event Action<Card> DropedOnPanel;
 
     public void Init(CardData data)
     {
@@ -28,17 +36,18 @@ public class Card : MonoBehaviour
         _health = data.Health;
         _attack = data.Attack;
 
+        _mover.StateChanged += OnMoverStateChanged;
         _view.Init(data);
     }
-
-    public void SetPosition(Vector3 newPosition, float duration)
+    
+    public void SetPosition(in Vector3 newPosition, float duration)
     {
-        transform.DOMove(newPosition, duration);
+        _mover.SetPosition(newPosition, duration);
     }
 
-    public void SetRotationZ(float zRotation)
+    public void SetRotation(in Vector3 euler)
     {
-        transform.eulerAngles = new Vector3(0, 0, zRotation);
+        _mover.SetRotation(euler);
     }
 
     public void SetParameter(CardParameter parameterType, int newValue)
@@ -68,5 +77,24 @@ public class Card : MonoBehaviour
     private void Die()
     {
         Died?.Invoke(this);
+    }
+
+    private void OnMoverStateChanged(CardState newState)
+    {
+        switch (newState)
+        {
+            case CardState.Drag:
+                _view.ToggleGlow(true);
+                break;
+            case CardState.InHand:
+                _view.ToggleGlow(false);
+                break;
+            case CardState.DropOnPanel:
+                _view.ToggleGlow(false);
+                DropedOnPanel?.Invoke(this);
+                break;
+            default:
+                break;
+        }
     }
 }

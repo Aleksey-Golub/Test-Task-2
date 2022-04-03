@@ -27,7 +27,7 @@ public class PlayerHandView : MonoBehaviour
             cards[i].SetPosition(newPosition, _cardMoveDuration);
 
             float zRotation = (middleIndex - i) * _rotationStep;
-            cards[i].SetRotationZ(zRotation);
+            cards[i].SetRotation(new Vector3(0, 0, zRotation));
 
             t += step;
         }

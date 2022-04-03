@@ -19,10 +19,16 @@ public class PlayerHandCardsChanger : MonoBehaviour
     private void ChangePlayerHandCard()
     {
         int cardsCount = _playerHand.Cards.Count;
+        if (cardsCount == 0)
+        {
+            _changingButton.interactable = false;
+            return;
+        }
+
         int parameterIndex = UnityEngine.Random.Range(0, Enum.GetValues(typeof(CardParameter)).Length);
         int newValue = UnityEngine.Random.Range(_newValueRange.x, _newValueRange.y);
 
-        _playerHand.ChangeCard(_targetCardIndex, (CardParameter)parameterIndex, newValue);
+        _playerHand.ChangeCardParameter(_targetCardIndex, (CardParameter)parameterIndex, newValue);
 
         if (cardsCount == _playerHand.Cards.Count)
             _targetCardIndex++;

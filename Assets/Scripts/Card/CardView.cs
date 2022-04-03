@@ -26,6 +26,11 @@ public class CardView : MonoBehaviour
         SetArt(data.Art);
     }
 
+    public void ToggleGlow(bool state)
+    {
+        _glow.enabled = state;
+    }
+
     public void SetArt(Sprite sprite)
     {
         _art.sprite = sprite;

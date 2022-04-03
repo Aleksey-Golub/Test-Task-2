@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class CardFactory : MonoBehaviour, ICardRecycler
+[CreateAssetMenu(fileName = "New Card Factory", menuName = "Card Factory/Create New Factory")]
+public class CardFactory : ScriptableObject, ICardRecycler
 {
     [SerializeField] private Card _cardPrefab;
 
